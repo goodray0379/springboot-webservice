@@ -1,4 +1,4 @@
-package com.devmin.springboot.webservice;
+package com.devmin.springboot.webservice.web;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
