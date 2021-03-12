@@ -3,5 +3,5 @@
 .gradle
 .idea
 
-# ignore all files in the build/ directory
-build/
+build
+out
