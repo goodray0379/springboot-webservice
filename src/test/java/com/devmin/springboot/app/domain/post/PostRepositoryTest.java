@@ -1,4 +1,4 @@
-package com.devmin.springboot.webservice.domain.posts;
+package com.devmin.springboot.app.domain.post;
 
 import org.junit.After;
 import org.junit.Test;
@@ -14,14 +14,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class PostsRepositoryTest {
+public class PostRepositoryTest {
 
     @Autowired
-    PostsRepository postsRepository;
+    PostRepository postRepository;
 
     @After
     public void cleanup() {
-        postsRepository.deleteAll();
+        postRepository.deleteAll();
     }
 
     @Test
@@ -30,35 +30,35 @@ public class PostsRepositoryTest {
         String title = "테스트 게시글";
         String content = "테스트 본문";
 
-        postsRepository.save(Posts.builder()
+        postRepository.save(Post.builder()
                 .title(title)
                 .content(content)
                 .author("jojoldu@gmail.com")
                 .build());
 
         //when
-        List<Posts> postsList = postsRepository.findAll();
+        List<Post> postList = postRepository.findAll();
 
         //then
-        Posts posts = postsList.get(0);
-        assertThat(posts.getTitle()).isEqualTo(title);
-        assertThat(posts.getContent()).isEqualTo(content);
+        Post post = postList.get(0);
+        assertThat(post.getTitle()).isEqualTo(title);
+        assertThat(post.getContent()).isEqualTo(content);
     }
 
     @Test
     public void BaseTimeEntity_등록(){
         //given
         LocalDateTime now = LocalDateTime.of(2019,6,4, 0, 0, 0);
-        postsRepository.save(Posts.builder().title("title").content("content").author("author").build());
+        postRepository.save(Post.builder().title("title").content("content").author("author").build());
 
         //when
-        List<Posts> postsList = postsRepository.findAll();
+        List<Post> postList = postRepository.findAll();
 
         //then
-        Posts posts = postsList.get(0);
+        Post post = postList.get(0);
 
-        System.out.println(">>>>>>> createDate=" + posts.getCreatedDate() +", modifiedDate=" +posts.getModifiedDate());
-        assertThat(posts.getCreatedDate()).isAfter(now);
-        assertThat(posts.getModifiedDate()).isAfter(now);
+        System.out.println(">>>>>>> createDate=" + post.getCreatedDate() +", modifiedDate=" + post.getModifiedDate());
+        assertThat(post.getCreatedDate()).isAfter(now);
+        assertThat(post.getModifiedDate()).isAfter(now);
     }
 }

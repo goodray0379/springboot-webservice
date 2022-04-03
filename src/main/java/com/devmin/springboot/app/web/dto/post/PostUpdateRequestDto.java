@@ -1,18 +1,17 @@
-package com.devmin.springboot.webservice.web.dto;
+package com.devmin.springboot.app.web.dto.post;
 
-import com.devmin.springboot.webservice.domain.posts.Posts;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PostsUpdateRequestDto {
+public class PostUpdateRequestDto {
     private String title;
     private String content;
 
     @Builder
-    public PostsUpdateRequestDto(String title, String content) {
+    public PostUpdateRequestDto(String title, String content) {
         this.title = title;
         this.content = content;
     }

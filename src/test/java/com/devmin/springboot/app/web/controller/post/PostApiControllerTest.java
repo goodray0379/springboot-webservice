@@ -1,10 +1,9 @@
-package com.devmin.springboot.webservice.web;
+package com.devmin.springboot.app.web.controller.post;
 
-import com.devmin.springboot.webservice.domain.posts.Posts;
-import com.devmin.springboot.webservice.domain.posts.PostsRepository;
-import com.devmin.springboot.webservice.web.dto.PostsSaveRequestDto;
-import com.devmin.springboot.webservice.web.dto.PostsUpdateRequestDto;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.devmin.springboot.app.domain.post.Post;
+import com.devmin.springboot.app.domain.post.PostRepository;
+import com.devmin.springboot.app.web.dto.post.PostSaveRequestDto;
+import com.devmin.springboot.app.web.dto.post.PostUpdateRequestDto;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PostsApiControllerTest {
+public class PostApiControllerTest {
     @LocalServerPort
     private int port;
 
@@ -29,11 +28,11 @@ public class PostsApiControllerTest {
     private TestRestTemplate restTemplate;
 
     @Autowired
-    private PostsRepository postsRepository;
+    private PostRepository postRepository;
 
     @After
     public void tearDown() throws Exception {
-        postsRepository.deleteAll();
+        postRepository.deleteAll();
     }
 
     @Test
@@ -41,7 +40,7 @@ public class PostsApiControllerTest {
         //given
         String title = "title";
         String content = "content";
-        PostsSaveRequestDto requestDto = PostsSaveRequestDto.builder()
+        PostSaveRequestDto requestDto = PostSaveRequestDto.builder()
                 .title(title)
                 .content(content)
                 .author("author")
@@ -56,7 +55,7 @@ public class PostsApiControllerTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isGreaterThan(0L);
 
-        List<Posts> all = postsRepository.findAll();
+        List<Post> all = postRepository.findAll();
         assertThat(all.get(0).getTitle()).isEqualTo(title);
         assertThat(all.get(0).getContent()).isEqualTo(content);
     }
@@ -67,7 +66,7 @@ public class PostsApiControllerTest {
         String title = "title";
         String content = "content";
         String author = "author";
-        Posts savedPost = postsRepository.save(Posts.builder()
+        Post savedPost = postRepository.save(Post.builder()
                 .title(title)
                 .content(content)
                 .author(author)
@@ -77,15 +76,15 @@ public class PostsApiControllerTest {
         String expectedTitle = "title2";
         String expectedContent = "content2";
 
-        PostsUpdateRequestDto requestDto =
-                PostsUpdateRequestDto.builder()
+        PostUpdateRequestDto requestDto =
+                PostUpdateRequestDto.builder()
                         .title(expectedTitle)
                         .content(expectedContent)
                         .build();
 
         String url = "http://localhost:" + port + "/api/v1/posts/" + updateId;
 
-        HttpEntity<PostsUpdateRequestDto> requestEntity = new HttpEntity<>(requestDto);
+        HttpEntity<PostUpdateRequestDto> requestEntity = new HttpEntity<>(requestDto);
 
         //when
         ResponseEntity<Long> responseEntity = restTemplate.
@@ -95,7 +94,7 @@ public class PostsApiControllerTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isGreaterThan(0L);
 
-        List<Posts> all = postsRepository.findAll();
+        List<Post> all = postRepository.findAll();
         assertThat(all.get(0).getTitle()).isEqualTo(expectedTitle);
         assertThat(all.get(0).getContent()).isEqualTo(expectedContent);
     }
